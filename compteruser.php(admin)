@@ -1,0 +1,78 @@
+<html>
+<head>
+	<title>Espace connexion</title>
+	<link rel="stylesheet" type="text/css" href="../styles/listecmdstyle.css">
+	 <link rel="stylesheet" type="text/css" href="../styles/entetestyle.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+	<script type="text/javascript" language="javascript" src="../javascripte/backcmdscript.js"></script>
+</head>
+<body>
+   <?php
+  include '../core/ligne_commandecore.php';
+  include '../entities/ligne_commande.php';
+    if (isset($_POST['submitconnexion'])) {
+      $msg="";
+      $username=isset($_POST['email']) ? $_POST['email'] : '';
+      $password=isset($_POST['pass']) ? $_POST['pass'] : '';
+      if (!empty($username) && !empty($password)) {
+        # code...
+
+      
+      //$connect=new connecter($username,$password);
+      $connectc=new lignecommandecore();
+      $result=$connectc->connexion($username,$password);
+      $liste=$result->fetchAll();
+       foreach ($liste as $row) {
+
+          if ($row['pseudo'] != $username)
+          {
+            header('Location:session_info.php?erreur=1&users='.$username);
+          }
+          elseif ($row['identifiant'] != $password)  {
+         //echo "Vous etes maintenant connecté(e)!"." ".$row['email'];
+         //header('Location: indexcommande.php');
+            header('Location:session_info.php?erreur=2&users='.$password);
+          }
+          else
+          {
+             //header('Location: formulaire.php');
+            session_start();
+            $_SESSION['email']=$username;
+            $_SESSION['pass']=$password;
+            $_SESSION['autoriseragent']= true;
+            header('Location:affichercmd.php');
+          }
+        }
+      }
+  }
+?>
+	<header style="color: #fff;font-family: sans-serif;font-weight: bold; font-size: 35px;">
+        Pour toutes opérations connecter vous à votre compte Agent.  
+    </fieldset>
+    </header>
+   
+       <div id="connexion">
+       	  <form method="POST" class="login-form">
+        <h1>Connecter à votre compte</h1>
+
+        <div class="txtb">
+        	<i class="fas fa-envelope"></i>
+          <input type="text" name="email" placeholder="Votre Pseudo...">
+          <span data-placeholder="Username"></span>
+        </div>
+
+        <div class="txtb">
+        	<i class="fas fa-user-lock"></i>
+          <input type="password" name="pass" placeholder="Votre Identifiant...">
+          <span data-placeholder="Password"></span>
+        </div>
+
+        <input type="submit" name="submitconnexion" class="logbtn" value="Connecter">
+
+      </form>
+       </div>
+  
+   
+</body>
+</html>
