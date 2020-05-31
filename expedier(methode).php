@@ -2,12 +2,12 @@
  <html>
  <head>
    <title>Expédition</title>
-   <metaà) =charset="utf-8">
+   <meta =charset="utf-8">
  </head>
  <body>
           <?php
- include '../core/expeditcore.php';
-    include '../entities/expedit.php';
+    include 'expeditcore.php';
+    include 'expedit.php';
     if (isset($_POST['submitexpedier'])) {
             $code=$_POST['code'];        
       $br="</br>";
@@ -38,13 +38,12 @@
             $verif2=essaie2();
             if ($verif2 == true) {
                
-               $mission="Vous avez une mission de livrer la commande du produit "."</br>"."Produit :".$_POST['nom_prod'].$br." Adresse :".$_POST['adresse'].$br." Téléphone du client ".$_POST['num'];
+               $mission="Vous avez une mission de livrer la commande du produit "."</br>"."Produit :".$_POST['nom_prod'].$br." Livraison :".$_POST['adresse'].$br." Telephone ".$_POST['tel'];
                $agent=new expediteur($code,$mission);
                $agentc=new expediteurcore();
                $test=$agentc->modifier($agent,$code);
                if ($test==true) {
-                    # code...
-                      echo "Expédition reussie!";
+                     header('Location: tablescommandes.php');
                    }
                else
                  {
@@ -53,13 +52,13 @@
             }
             else
             {
-               $mission="Vous avez une mission de livrer la commande du produit ".$_POST['nom_prod']." Adresse ".$_POST['adresse']." Téléphone du client ".$_POST['num'];
+               $mission="Vous avez une mission de livrer la commande du produit "."</br>"."Produit :".$_POST['nom_prod'].$br." Livraison :".$_POST['adresse'].$br." Telephone ".$_POST['tel'];
                $agent=new expediteur($code,$mission);
                $agentc=new expediteurcore();
                $test=$agentc->expedier($agent);
                if ($test==true) {
                     # code...
-                      echo "Expédition reussie!";
+                     header('Location: tablescommandes.php');
                    }
 
                else
