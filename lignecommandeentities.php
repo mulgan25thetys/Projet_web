@@ -1,78 +1,50 @@
-<?php
+class autres
+   {
+     private $autre0;
+     private $autre1;
+     private $autre2;
+
+     public function __construct($autre0,$autre1,$autre2)
+     {
+      $this->autre0=$autre0;
+      $this->autre1=$autre1;
+      $this->autre2=$autre2;
+     }
+      
+     public function getautre0(){return $this->autre0;}
+     public function getautre1(){return $this->autre1;}
+     public function getautre2(){return $this->autre2;}
+   }
    class lignecommande
    {
-   	 private $nom_prod;
-   	 private $type;
+     private $ref;
+   	 private $total;
    	 private $qte;
-   	 private $client;
-   	 private $mail;
-   	 private $adresse;
-   	 private $tel;
-   	 private $livraison;
-   	 private $prix;
-   	 private $datecmd;
+     private $pays;
+     private $ville;
+     private $adr;
+     private $tel;
+     private $mail;
 
-   	 public function __construct($type,$nom_prod,$qte,$client,$mail,$adresse,$tel,$livraison,$prix,$datecmd)
+   	 public function __construct($ref,$qte,$total,$pays,$ville,$adr,$tel,$mail)
    	 {
-   	 	$this->nom_prod=$nom_prod;
-   	 	$this->type=$type;
+      $this->ref=$ref;
+   	 	$this->total=$total;
    	 	$this->qte=$qte;
-   	 	$this->client=$client;
-   	 	$this->mail=$mail;
-   	 	$this->adresse=$adresse;
-   	 	$this->tel=$tel;
-   	 	$this->livraison=$livraison;
-   	 	$this->prix=$prix;
-   	 	$this->datecmd=$datecmd;
+      $this->pays=$pays;
+      $this->ville=$ville;
+      $this->adr=$adr;
+      $this->tel=$tel;
+      $this->mail=$mail;
    	 }
-
-   	 public function getnomprod(){return $this->nom_prod;}
-   	 public function gettype(){return $this->type;}
+      
+     public function getref(){return $this->ref;}
+   	 public function gettotal(){return $this->total;}
    	 public function getqte(){return $this->qte;}
-   	 public function getclient(){return $this->client;}
-   	 public function getmail(){return $this->mail;}
-   	 public function getadr(){return $this->adresse;}
-   	 public function gettel(){return $this->tel;}
-   	 public function getlivraison(){return $this->livraison;}
-   	 public function getprix(){return $this->prix;}
-   	 public function getdate(){return $this->datecmd;}
+     public function getpays(){return $this->pays;}
+     public function getville(){return $this->ville;}
+     public function getadr(){return $this->adr;}
+     public function gettel(){return $this->tel;}
+     public function getmail(){return $this->mail;}
+     
    }
-    class lignecommandemod
-   {
-       private $nom_prod;
-       private $type;
-       private $qte;
-       private $client;
-       private $mail;
-       private $adresse;
-       private $tel;
-       private $livraison;
-       private $prix;
-       private $datecmd;
-
-       public function __construct($type,$nom_prod,$qte,$mail,$adresse,$tel,$livraison,$prix,$datecmd)
-       {
-         $this->nom_prod=$nom_prod;
-         $this->type=$type;
-         $this->qte=$qte;
-         $this->mail=$mail;
-         $this->adresse=$adresse;
-         $this->tel=$tel;
-         $this->livraison=$livraison;
-         $this->prix=$prix;
-         $this->datecmd=$datecmd;
-       }
-       
-       public function getnomprod(){return $this->nom_prod;}
-       public function gettype(){return $this->type;}
-       public function getqte(){return $this->qte;}
-       public function getclient(){return $this->client;}
-       public function getmail(){return $this->mail;}
-       public function getadr(){return $this->adresse;}
-       public function gettel(){return $this->tel;}
-       public function getlivraison(){return $this->livraison;}
-       public function getprix(){return $this->prix;}
-       public function getdate(){return $this->datecmd;}
-   }
-   
-?>
