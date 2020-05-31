@@ -1,17 +1,32 @@
-<html>
-<head>
-	<title>Espace connexion</title>
-	<link rel="stylesheet" type="text/css" href="../styles/listecmdstyle.css">
-	 <link rel="stylesheet" type="text/css" href="../styles/entetestyle.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
-	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-	<script type="text/javascript" language="javascript" src="../javascripte/backcmdscript.js"></script>
-</head>
-<body>
-   <?php
-  include '../core/ligne_commandecore.php';
-  include '../entities/ligne_commande.php';
-    if (isset($_POST['submitconnexion'])) {
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Naturalium | Connexion</title>
+
+    <!-- Bootstrap -->
+    <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="../vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="../vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- Animate.css -->
+    <link href="../vendors/animate.css/animate.min.css" rel="stylesheet">
+
+    <!-- Custom Theme Style -->
+    <link href="../build/css/custom.min.css" rel="stylesheet">
+  </head>
+
+  <body class="login">
+    <?php
+  include 'ligne_commandecore.php';
+  include 'ligne_commande.php';
+    if (isset($_POST['envoyer'])) {
       $msg="";
       $username=isset($_POST['email']) ? $_POST['email'] : '';
       $password=isset($_POST['pass']) ? $_POST['pass'] : '';
@@ -38,41 +53,91 @@
           {
              //header('Location: formulaire.php');
             session_start();
-            $_SESSION['email']=$username;
+            $_SESSION['umail']=$username;
             $_SESSION['pass']=$password;
+            $_SESSION['pseudo']=$row['pseudo'] ;
             $_SESSION['autoriseragent']= true;
-            header('Location:affichercmd.php');
+            header('Location:tablescommandes.php');
           }
         }
       }
   }
 ?>
-	<header style="color: #fff;font-family: sans-serif;font-weight: bold; font-size: 35px;">
-        Pour toutes opérations connecter vous à votre compte Agent.  
-    </fieldset>
-    </header>
-   
-       <div id="connexion">
-       	  <form method="POST" class="login-form">
-        <h1>Connecter à votre compte</h1>
+    <div>
+      <a class="hiddenanchor" id="signup"></a>
+      <a class="hiddenanchor" id="signin"></a>
 
-        <div class="txtb">
-        	<i class="fas fa-envelope"></i>
-          <input type="text" name="email" placeholder="Votre Pseudo...">
-          <span data-placeholder="Username"></span>
+      <div class="login_wrapper">
+        <div class="animate form login_form">
+          <section class="login_content">
+            <form method="POST">
+              <h1>Formulaire de connexion</h1>
+              <div>
+                <input type="text" class="form-control" name="email" placeholder="Username" required="" />
+              </div>
+              <div>
+                <input type="password" class="form-control" name="pass" placeholder="Password" required="" />
+              </div>
+              <div>
+                <button class="btn btn-default submit" type="submit" name="envoyer">Connecter</button>
+                <a class="reset_pass" href="#">Mot de passe perdu?</a>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">Nouveau?
+                  <a href="#signup" class="to_register"> Créer un compte </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-paw"></i>Naturalium </h1>
+                  <p>©2020 Tous droits réservés. Naturalium.com</p>
+                </div>
+              </div>
+            </form>
+          </section>
         </div>
 
-        <div class="txtb">
-        	<i class="fas fa-user-lock"></i>
-          <input type="password" name="pass" placeholder="Votre Identifiant...">
-          <span data-placeholder="Password"></span>
+        <div id="register" class="animate form registration_form">
+          <section class="login_content">
+            <form method="POST" action="loginajouter.php">
+              <h1>Créer un compte</h1>
+              <div>
+                <input type="text" class="form-control" name="nom" placeholder="Nom utilisateur" required="" />
+              </div>
+              <div>
+                <input type="email" class="form-control" name="email" placeholder="Email" required="" />
+              </div>
+              <div>
+                <input type="password" class="form-control" name="pass" placeholder="Mot de passe" required="" />
+              </div>
+              <div>
+                <button class="btn btn-default submit" type="submit" name="envoyeradd">Creer un compte</button>
+              </div>
+
+              <div class="clearfix"></div>
+
+              <div class="separator">
+                <p class="change_link">Déja un membre ?
+                  <a href="#signin" class="to_register"> Connecter </a>
+                </p>
+
+                <div class="clearfix"></div>
+                <br />
+
+                <div>
+                  <h1><i class="fa fa-paw"></i> Naturalium </h1>
+                  <p>©2020 Tous droits réservés. Naturalium.com</p>
+                </div>
+              </div>
+            </form>
+          </section>
         </div>
-
-        <input type="submit" name="submitconnexion" class="logbtn" value="Connecter">
-
-      </form>
-       </div>
-  
-   
-</body>
+      </div>
+    </div>
+  </body>
 </html>
