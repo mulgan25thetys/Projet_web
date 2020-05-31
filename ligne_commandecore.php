@@ -1,32 +1,25 @@
 <?php
-include "../config.php";
+include "config.php";
  class lignecommandecore
  {
-    public function ajouterligne($lignecmd)
+    public function ajouteruser($ligneuser)
     {
-    	$sql="insert into commandes(type,nom_prod,qte,client,mail,adresse,tel,livraison,prix,datecmd) values (:type,:nom_prod,:qte,:client,:mail,:adr,:tel,:livraison,:prix,:date)";
-    	$db=config::getConnexion();
-    	try {
-    		$req=$db->prepare($sql);
-    		$req->bindValue(':type',$lignecmd->gettype());
-    		$req->bindValue(':nom_prod',$lignecmd->getnomprod());
-    		$req->bindValue(':qte',$lignecmd->getqte());
-    		$req->bindValue(':client',$lignecmd->getclient());
-    		$req->bindValue(':mail',$lignecmd->getmail());
-    		$req->bindValue(':adr',$lignecmd->getadr());
-    		$req->bindValue(':tel',$lignecmd->gettel());
-    		$req->bindValue(':livraison',$lignecmd->getlivraison());
-    		$req->bindValue(':prix',$lignecmd->getprix());
-    		$req->bindValue(':date',$lignecmd->getdate());
-    		$test=$req->execute();
-    		return $test;
-    	} catch (Exception $e) {
-    		echo "Erreur ".$e->getMessage();
-    	}
+        $sql="insert into employes(email,identifiant,pseudo) values (:email,:ident,:pseudo)";
+        $db=config::getConnexion();
+        try {
+            $req=$db->prepare($sql);
+            $req->bindValue(':email',$ligneuser->getemail());
+            $req->bindValue(':ident',$ligneuser->getident());
+            $req->bindValue(':pseudo',$ligneuser->getpseudo());
+            $test=$req->execute();
+            return $test;
+        } catch (Exception $e) {
+            echo "Erreur ".$e->getMessage();
+        }
     }
     public function afficherligne()
     {
-    	$sql="select *from commandes order by 1";
+    	$sql="SELECT DISTINCT `ligne_cmd`.`iddet`,`ligne_cmd`.`ref_prod`,`ligne_cmd`.`qte`,`ligne_cmd`.`total`,`ligne_cmd`.`pays`,`ligne_cmd`.`ville`,`ligne_cmd`.`adr`,`ligne_cmd`.`tel`,`ligne_cmd`.`mail`,`ligne_cmd`.`datecmd`,`produits`.`images`,`produits`.`reference`,`utilisateurs`.`pseudo` from (`ligne_cmd` inner join `utilisateurs` on `ligne_cmd`.`mail` = `utilisateurs`.`email`) inner join `produits` on `ligne_cmd`.`ref_prod` = `produits`.`reference` ";
     	$db=config::getConnexion();
     	try {
     		$liste=$db->query($sql);
@@ -34,10 +27,11 @@ include "../config.php";
     	} catch (Exception $e) {
     		echo "Erreur ".$e->getMessage();
     	}
+        /*SELECT DISTINCT row_number() over(order by salary desc)`ligne_cmd`.`ref_prod`,`ligne_cmd`.`qte`,`ligne_cmd`.`total`,`utilisateurs`.`email`,`produits`.`images` FROM `ligne_cmd` INNER JOIN `produits` ON `ligne_cmd`.`ref_prod` = `produits`.`reference` INNER JOIN `utilisateurs` ON `ligne_cmd`.`mail` = `utilisateurs`.`email`*/
     }
     public function supprimerligne($id)
     {
-    	$sql="DELETE from commandes where id=$id";
+    	$sql="DELETE from ligne_cmd where iddet=$id";
     	$db=config::getConnexion();
     	$req=$db->prepare($sql);
     	try {
@@ -49,7 +43,7 @@ include "../config.php";
     }
     public function recuperercmd($id)
     {
-    	$sql="select *from commandes where id=$id";
+    	$sql="select *from ligne_cmd where iddet=$id";
     	$db=config::getConnexion();
     	try {
     		$liste=$db->query($sql);
@@ -82,29 +76,19 @@ include "../config.php";
     }
     public function modifiercmd($lignecmd,$id)
     {
-    	$sql="UPDATE commandes SET type=:type, nom_prod=:nom, qte=:qte,mail=:mail, adresse=:adr, tel=:tel, livraison=:livraison, prix=:prix, datecmd=:datecmd WHere id=:id";
+    	$sql="UPDATE ligne_cmd SET  qte=:qte,pays=:pays,ville=:ville,adr=:adr,mail=:mail WHere iddet=:id";
     	$db=config::getConnexion();
     	try {
     		$req=$db->prepare($sql);
-    		$req->bindValue(':type',$lignecmd->gettype());
-    		$req->bindValue(':nom',$lignecmd->getnomprod());
     		$req->bindValue(":qte",$lignecmd->getqte());
-    		$req->bindValue(":mail",$lignecmd->getmail());
-    		$req->bindValue(":adr",$lignecmd->getadr());
-    		$req->bindValue(":tel",$lignecmd->gettel());
-    		$req->bindValue(":livraison",$lignecmd->getlivraison());
-    		$req->bindValue(":prix",$lignecmd->getprix());
-    		$req->bindValue(":datecmd",$lignecmd->getdate());
-    		$req->bindValue(':id',$id);
-    		$test=$req->execute();
-    		return $test;
+    		return $req;
     	} catch (Exception $e) {
     		echo "Erreur ".$e->getMessage();
     	}
     }
     public function recherchercmd($text)
     {
-    	$sql="SELECT *FROM commandes WHERE qte LIKE '%$text%' ";
+    	$sql="select *from (ligne_cmd inner join utilisateurs on ligne_cmd.mail = utilisateurs.email) inner join produits on ligne_cmd.ref_prod = produits.reference WHERE qte LIKE '%$text%' ";
     	$db=config::getConnexion();
     	try {
     		$req=$db->query($sql);
@@ -115,7 +99,7 @@ include "../config.php";
     }
     public function trier()
     {
-    	$sql="Select *From commandes order by qte";
+    	$sql="select *from (ligne_cmd inner join utilisateurs on ligne_cmd.mail = utilisateurs.email) inner join produits on ligne_cmd.ref_prod = produits.reference order by ligne_cmd.qte";
     	$db=config::getConnexion();
     	try {
     		$req=$db->query($sql);
@@ -123,18 +107,6 @@ include "../config.php";
     	} catch (Exception $e) {
     		echo "Erreur ".$e->getMessage();
     	}
-    }
-    public function afficherinfo($email)
-    {
-        $sql="select *from commandes where mail= '$email' ";
-        $db=config::getConnexion();
-        try {
-            $req=$db->query($sql);
-            //$req->bindValue(':email',$email);
-            return $req;
-        } catch (Exception $e) {
-            echo "Erreur ".$e->getMessage();
-        }
     }
     public function connexion($user,$pass)
     {
@@ -168,6 +140,18 @@ include "../config.php";
         } catch (Exception $e) {
             echo "Erreur ".$e->getMessage();
         }
+    }
+     public function vidercommande()
+    {
+        $sql="TRUNCATE `ligne_cmd`";
+        $db=config::getConnexion();
+        $req=$db->prepare($sql);
+        try {
+            $test=$req->execute();
+            return $test;
+        } catch (Exception $e) {
+            echo "Erreur ".$e->getMessage();
+        } 
     }
     
  }
