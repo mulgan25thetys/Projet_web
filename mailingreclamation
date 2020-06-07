@@ -1,0 +1,52 @@
+# Projet_web
+Création d'un site web dans un projet d'étude deuxieme année 
+
+<?PHP
+include_once "config.php";
+include_once "cores/reclamationC.php";
+require 'PHPMailerAutoload.php';
+include_once 'phpmailer/class.phpmailer.php';
+include_once 'phpmailer/class.smtp.php';
+                        require 'credential.php';
+
+                        $mail = new PHPMailer;
+
+                        // $mail->SMTPDebug = 4;                               // Enable verbose debug output
+
+                        $mail->isSMTP();                                      // Set mailer to use SMTP
+                        $mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+                        $mail->SMTPAuth = true;                               // Enable SMTP authentication
+                        $mail->Username = EMAIL;                 // SMTP username
+                        $mail->Password = PASS;                           // SMTP password
+                        $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+                        $mail->Port = 587;                                    // TCP port to connect to
+
+                        $mail->setFrom(EMAIL, 'Naturalium');
+                        $mail->addAddress($_GET['email']);     // Add a recipient
+
+                        $mail->addReplyTo(EMAIL);
+                        
+                        $mail->isHTML(true);                                  // Set email format to HTML
+                        if ($_GET['etat']==2) {
+                        $mail->Subject = "Rejet de votre reclamation";
+                        $mail->Body    = "Nous sommes désolé de vous annoncer que votre réclamation a été rejetée";
+                        $mail->AltBody = "Nous sommes désolé de vous annoncer que votre réclamation a été rejetée";
+                        }
+                        else{
+                        $mail->Subject = "Prise en compte de votre reclamation";
+                        $mail->Body    = "Bonjour chère client nous vous annonçons que votre reclamation a bien été prise en compte. Merci pour votre fidélité ";
+                        $mail->AltBody = "Bonjour chère client nous vous annonçons que votre reclamation a bien été prise en compte. Merci pour votre fidélité ";
+                        }
+                        
+
+                        if(!$mail->send()) {
+                            echo 'Erreur echec';
+                            echo 'Mail Erreur: ' . $mail->ErrorInfo;
+                        } else {
+                            echo 'Email Envoie';
+                        }
+$reclamationC=new reclamationC();
+    $reclamationC->etatreclamation($_GET["id"],$_GET['etat']);
+    header('Location: reclamation.php');
+
+?>
