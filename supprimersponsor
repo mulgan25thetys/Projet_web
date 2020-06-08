@@ -1,0 +1,10 @@
+# Projet_web
+Création d'un site web dans un projet d'étude deuxieme année 
+<?PHP
+include_once "../config.php";
+include_once "../cores/sponsorC.php";
+$sponsorC=new sponsorC();
+	$sponsorC->supprimersponsor($_POST["id_sponsor"]);
+	header('Location: ../sponsor.php');
+
+?>
