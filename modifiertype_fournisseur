@@ -1,0 +1,16 @@
+# Projet_web
+Création d'un site web dans un projet d'étude deuxieme année 
+<?PHP
+
+include "../config.php";
+include "../entities/type_fournisseur.php";
+include "../cores/type_fournisseurC.php";
+$id_type=$_GET['id'];
+if (isset($_POST['modif'])){
+  $type_fournisseurC=new type_fournisseurC();
+  //if (isset($_FILES['image'])){$image = file_get_contents($_FILES['image']['tmp_name']);}
+  $type_fournisseur=new type_fournisseur($_POST['type']);
+  $type_fournisseurC->modifiertype_fournisseur($type_fournisseur,$id_type);
+  header('Location: ../type_fournisseur.php');
+}
+?>
